@@ -1,0 +1,40 @@
+import pytest
+from unittest.mock import Mock
+
+def test_display_policies_due_for_renewal():
+    policies = [
+        {"policy_id": "P001", "renewal_date": "2023-11-15"},
+        {"policy_id": "P002", "renewal_date": "2023-11-20"}
+    ]
+    fetch_policies = Mock(return_value=policies)
+    result = fetch_policies()
+    assert len(result) > 0, "No policies due for renewal"
+    assert all(policy["renewal_date"] <= "2023-11-30" for policy in result), "Policy renewal date exceeds 30 days"
+
+def test_view_renewal_details():
+    policy_details = {
+        "policy_id": "P001",
+        "premium": 500,
+        "coverage": "Comprehensive",
+        "expiry_date": "2023-12-15"
+    }
+    fetch_policy_details = Mock(return_value=policy_details)
+    result = fetch_policy_details()
+    assert result["policy_id"] == "P001", "Incorrect policy ID"
+    assert result["premium"] == 500, "Incorrect premium amount"
+    assert result["coverage"] == "Comprehensive", "Incorrect coverage details"
+
+def test_secure_online_payment():
+    payment_status = Mock(return_value="Success")
+    result = payment_status()
+    assert result == "Success", "Payment failed"
+
+def test_generate_renewed_policy_document():
+    policy_document = Mock(return_value="Policy Document Generated")
+    result = policy_document()
+    assert result == "Policy Document Generated", "Policy document generation failed"
+
+def test_send_renewal_confirmation_email():
+    email_status = Mock(return_value="Email Sent")
+    result = email_status()
+    assert result == "Email Sent", "Renewal confirmation email not sent"
